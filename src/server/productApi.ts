@@ -1,3 +1,5 @@
+import { ProductAPI } from "@/pages/Home";
+
 const getProduct = async () => {
   try {
     const api = await fetch("https://fakestoreapi.com/products");
@@ -32,4 +34,17 @@ const getProductByID = async (id: number) => {
   }
 };
 
-export { getProduct, getcategories, getProductByID };
+const getProductsByCategory = async (category: string) => {
+  try {
+    const api = await fetch("https://fakestoreapi.com/products");
+    const allData = await api.json();
+    const data = allData.filter(
+      (filteredData: ProductAPI) => filteredData.category == category
+    );
+    return data;
+  } catch (error) {
+    throw Error("Something went wrong on hitting product-api: " + error);
+  }
+};
+
+export { getProduct, getcategories, getProductByID, getProductsByCategory };

@@ -79,7 +79,7 @@ const Home = () => {
                 {category.toLocaleUpperCase()}
               </span>
               <Link
-                to={"/test"}
+                to={`/all/${category}`}
                 className="text-blue-600 cursor-pointer hover:underline font-semibold"
               >
                 <Button variant={"ghost"} className="text-lg">

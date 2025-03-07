@@ -29,7 +29,9 @@ const ProductsHome: React.FC<ProductHomeProps> = ({
           />
         </div>
         <div className="mx-2 text-gray-600 group-hover:text-gray-900">
-          <span className="line-clamp-3 tracking-tighter text-md">{name}</span>
+          <span className="line-clamp-2 my-4 tracking-tighter text-md">
+            {name}
+          </span>
           <div className="flex justify-between my-1 px-1">
             <span className="text-xl font-semibold">£{price}</span>
             <Button>
