@@ -9,7 +9,7 @@ import {
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
-const cartItemCount = 1;
+const cartItemCount = 0;
 
 const CartSheet = () => {
   return (

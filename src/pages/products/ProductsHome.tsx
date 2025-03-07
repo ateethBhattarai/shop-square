@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { ShoppingCartIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ProductHomeProps {
@@ -23,12 +25,17 @@ const ProductsHome: React.FC<ProductHomeProps> = ({
           <img
             src={image}
             alt="product-image"
-            className="opacity-90 group-hover:opacity-100 w-1/2"
+            className="opacity-90 group-hover:opacity-100 w-1/2 h-48"
           />
         </div>
         <div className="mx-2 text-gray-600 group-hover:text-gray-900">
           <span className="line-clamp-3 tracking-tighter text-md">{name}</span>
-          <span className="text-xl font-semibold">£{price}</span>
+          <div className="flex justify-between my-1 px-1">
+            <span className="text-xl font-semibold">£{price}</span>
+            <Button>
+              <ShoppingCartIcon />
+            </Button>
+          </div>
         </div>
       </Link>
     </div>

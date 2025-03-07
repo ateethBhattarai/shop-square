@@ -1,70 +1,42 @@
-import Slider from "react-slick";
+import { useEffect, useState } from "react";
 
-function Test() {
-  const settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    initialSlide: 0,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-  return (
-    <div className="slider-container">
-      <Slider {...settings}>
-        <div>
-          <h3>1</h3>
-        </div>
-        <div>
-          <h3>2</h3>
-        </div>
-        <div>
-          <h3>3</h3>
-        </div>
-        <div>
-          <h3>4</h3>
-        </div>
-        <div>
-          <h3>5</h3>
-        </div>
-        <div>
-          <h3>6</h3>
-        </div>
-        <div>
-          <h3>7</h3>
-        </div>
-        <div>
-          <h3>8</h3>
-        </div>
-      </Slider>
-    </div>
-  );
+interface Product {
+  category: string;
+  description: string;
+  image: string;
 }
+
+const Test = () => {
+  const [productData, setProductData] = useState<Product[] | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("https://fakestoreapi.com/products?limmit=10");
+        const data = await res.json(); // Fetch and parse data as an object
+        setProductData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (productData) {
+    console.log(productData[0]);
+
+    return (
+      <div>
+        Category: <p>{productData[0].category}</p>
+        <div>
+          <img src={productData[0].image} />
+        </div>
+      </div>
+    );
+  }
+};
 
 export default Test;

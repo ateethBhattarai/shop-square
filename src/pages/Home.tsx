@@ -1,13 +1,37 @@
 import MaxWidthContainer from "@/components/manual/MaxWidthContainer";
 import { Button } from "@/components/ui/button";
-import { products } from "@/constant/product_data";
+import { getcategories, getProduct } from "@/server/productApi";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import ProductsHome from "./products/ProductsHome";
+import PageNotFound from "./not-found/PageNotFound";
+
+export interface ProductAPI {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+}
 
 const Home = () => {
+  const [products, setProducts] = useState<undefined | ProductAPI[]>(undefined);
+  const [categories, setCategories] = useState<undefined | string[]>(undefined);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getProduct();
+      setCategories(await getcategories());
+      setProducts(data);
+    };
+
+    fetchData();
+  }, []);
+
   const responsiveSettings = {
     dots: true,
     infinite: true,
@@ -42,33 +66,42 @@ const Home = () => {
       },
     ],
   };
+
+  if (!products) return <PageNotFound />;
+
   return (
     <>
       <MaxWidthContainer>
-        <div className="border-2 p-2 rounded-sm mx-4">
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-xl">Electronics</span>
-            <Link
-              to={"/test"}
-              className="text-blue-600 cursor-pointer hover:underline font-semibold"
-            >
-              <Button variant={"ghost"} className="text-lg">
-                See all...
-              </Button>
-            </Link>
+        {categories?.map((category) => (
+          <div className=" p-2 mb-10 rounded-sm mx-4" key={category}>
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-xl">
+                {category.toLocaleUpperCase()}
+              </span>
+              <Link
+                to={"/test"}
+                className="text-blue-600 cursor-pointer hover:underline font-semibold"
+              >
+                <Button variant={"ghost"} className="text-lg">
+                  See all...
+                </Button>
+              </Link>
+            </div>
+            <Slider {...responsiveSettings}>
+              {products
+                ?.filter((product) => product.category == category)
+                .map((product, index) => (
+                  <ProductsHome
+                    key={index}
+                    id={product.id}
+                    image={product.image}
+                    name={product.title}
+                    price={product.price}
+                  />
+                ))}
+            </Slider>
           </div>
-          <Slider {...responsiveSettings}>
-            {products.map((product, index) => (
-              <ProductsHome
-                key={index}
-                id={product.id}
-                image={product.product_image}
-                name={product.product_name}
-                price={product.price}
-              />
-            ))}
-          </Slider>
-        </div>
+        ))}
       </MaxWidthContainer>
     </>
   );
